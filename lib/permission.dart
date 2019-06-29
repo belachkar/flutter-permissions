@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
-class MyApp extends StatefulWidget {
+class Permissions extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _PermissionsState createState() => _PermissionsState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _PermissionsState extends State<Permissions> {
   String _platformVersion;
   Permission permission;
 
@@ -30,48 +29,41 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Permissions'),
-        ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text('platform version is $_platformVersion\n'),
-              Divider(height: 10.0),
-              DropdownButton(
-                items: _getDropDownItems(),
-                value: permission,
-                onChanged: onDropdownChanged,
-              ),
-              Divider(height: 10.0),
-              RaisedButton(
-                color: Colors.greenAccent,
-                onPressed: checkPermission,
-                child: Text('Check permission'),
-              ),
-              Divider(height: 10.0),
-              RaisedButton(
-                color: Colors.orange,
-                onPressed: requestPermission,
-                child: Text('Request permission'),
-              ),
-              Divider(height: 10.0),
-              RaisedButton(
-                onPressed: getStatus,
-                color: Colors.blueAccent,
-                child: Text('Get status'),
-              ),
-              Divider(height: 10.0),
-              RaisedButton(
-                onPressed: SimplePermissions.openSettings,
-                color: Colors.redAccent,
-                child: Text('Open settings'),
-              ),
-            ],
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Text('platform version is $_platformVersion\n'),
+          Divider(height: 10.0),
+          DropdownButton(
+            items: _getDropDownItems(),
+            value: permission,
+            onChanged: onDropdownChanged,
           ),
-        ),
+          Divider(height: 10.0),
+          RaisedButton(
+            color: Colors.greenAccent,
+            onPressed: checkPermission,
+            child: Text('Check permission'),
+          ),
+          Divider(height: 10.0),
+          RaisedButton(
+            color: Colors.orange,
+            onPressed: requestPermission,
+            child: Text('Request permission'),
+          ),
+          Divider(height: 10.0),
+          RaisedButton(
+            onPressed: getStatus,
+            color: Colors.blueAccent,
+            child: Text('Get status'),
+          ),
+          Divider(height: 10.0),
+          RaisedButton(
+            onPressed: SimplePermissions.openSettings,
+            color: Colors.redAccent,
+            child: Text('Open settings'),
+          ),
+        ],
       ),
     );
   }
@@ -98,12 +90,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   void requestPermission() async {
-    PermissionStatus result = await SimplePermissions.requestPermission(permission);
-    print('Request: ${result.toString()}');
+    try {
+    PermissionStatus result =
+        await SimplePermissions.requestPermission(permission);
+    print('Request: ${result.toString()}');      
+    } catch (e) {
+      print(e);
+    }
   }
 
   void getStatus() async {
-    PermissionStatus result = await SimplePermissions.getPermissionStatus(permission);
+    PermissionStatus result =
+        await SimplePermissions.getPermissionStatus(permission);
     print('Permission status: ${result.toString()}');
   }
 }
